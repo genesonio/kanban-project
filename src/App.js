@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { Column } from './components/Columns'
 
 const initialItems = [
   { id: '1', content: 'Conteúdo 1' },
@@ -26,13 +26,21 @@ const initialColumns = [
 ]
 
 function App() {
+  document.body.style.backgroundColor = 'rgb(26, 32, 39)'
+
   const [columns, setColumns] = useState(initialColumns)
 
   const onDragEnd = results => {
     const { source, destination } = results
+    console.log(results)
 
+    // Pega o index das colunas
     const sourceIndex = source.droppableId
     const destinationIndex = destination.droppableId
+
+    // Pega o index dos itens
+    const sourceItemIndex = source.index
+    const destinationItemIndex = destination.index
 
     const sameColumn = sourceIndex === destinationIndex
 
@@ -49,18 +57,17 @@ function App() {
     )
 
     // Pega o item "arrastado"
-    let draggedItem = (sourceColumnItems =
-      sourceColumnItems[results.source.index])
+    let draggedItem = (sourceColumnItems = sourceColumnItems[sourceItemIndex])
 
     if (sameColumn) {
       // Coloca o item "arrastado" no local desejado em outra posição do array
-      filteredSrcColumnItems.splice(results.destination.index, 0, draggedItem)
+      filteredSrcColumnItems.splice(destinationItemIndex, 0, draggedItem)
 
       columnsCopy[destinationIndex].items = filteredSrcColumnItems
       setColumns(columnsCopy)
     } else {
       // Adiciona o item "arrastado" para a nova coluna
-      destinationColumnItems.splice(results.destination.index, 0, draggedItem)
+      destinationColumnItems.splice(destinationItemIndex, 0, draggedItem)
 
       columnsCopy[sourceIndex].items = filteredSrcColumnItems
       columnsCopy[destinationIndex].items = destinationColumnItems
@@ -69,64 +76,7 @@ function App() {
     }
   }
 
-  return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <DragDropContext onDragEnd={onDragEnd}>
-        {columns.map((column, index) => (
-          <div
-            key={column.id}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center'
-            }}
-          >
-            <h1>{column.name}</h1>
-            <Droppable droppableId={index.toString()} key={column.id}>
-              {provided => (
-                <div
-                  ref={provided.innerRef}
-                  style={{
-                    backgroundColor: 'lightblue',
-                    width: '20rem',
-                    height: '30rem',
-                    margin: '.5rem',
-                    padding: '1rem'
-                  }}
-                >
-                  {column.items.map((item, index) => (
-                    <Draggable
-                      draggableId={item.id.toString()}
-                      index={index}
-                      key={item.id}
-                    >
-                      {provided => (
-                        <div
-                          key={item.id}
-                          {...provided.dragHandleProps}
-                          {...provided.draggableProps}
-                          ref={provided.innerRef}
-                          style={{
-                            backgroundColor: 'whitesmoke',
-                            height: '2.5rem',
-                            marginBottom: '.5rem',
-                            ...provided.draggableProps.style
-                          }}
-                        >
-                          {item.content}
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </div>
-        ))}
-      </DragDropContext>
-    </div>
-  )
+  return <Column onDragEnd={onDragEnd} columns={columns} />
 }
 
 export default App
