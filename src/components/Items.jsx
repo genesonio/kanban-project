@@ -4,11 +4,11 @@ import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 import { Paper, Typography } from '@mui/material'
-import { Delete } from '@mui/icons-material'
+import { DeleteRounded } from '@mui/icons-material'
 
-export const Items = ({ column }) =>
-  column.items.map((item, index) => (
-    <Draggable draggableId={item.id.toString()} index={index} key={item.id}>
+export const Items = ({ column, removeItem }) =>
+  column.items.map((item) => (
+    <Draggable draggableId={item.id.toString()} index={item.id} key={item.id}>  
       {provided => (
         <Paper
           key={item.id}
@@ -19,7 +19,6 @@ export const Items = ({ column }) =>
             borderRadius: '1rem',
             backgroundColor: 'dimgrey',
             height: '2.5rem',
-            marginBottom: '.5rem',
             ...provided.draggableProps.style
           }}
         >
@@ -38,6 +37,9 @@ export const Items = ({ column }) =>
             >
               {item.content}
             </Typography>
+            <div>
+              <DeleteRounded onClick={() => removeItem(column, item.id) } />
+            </div>
           </div>
         </Paper>
       )}

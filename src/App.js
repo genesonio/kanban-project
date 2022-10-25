@@ -1,38 +1,52 @@
 import { useState } from 'react'
 import { Column } from './components/Columns'
 
-const initialItems = [
-  { id: '1', content: 'Conteúdo 1' },
-  { id: '2', content: 'Conteúdo 2' },
-  { id: '3', content: 'Conteúdo 3' }
-]
-
 const initialColumns = [
   {
+    id: '0',
+    name: 'TO DO',
+    items: []
+  },
+  {
     id: '1',
-    name: 'To do',
-    items: initialItems
+    name: 'DOING',
+    items: []
   },
   {
     id: '2',
-    name: 'Doing',
-    items: [{ id: '4', content: 'Estou aqui' }]
-  },
-  {
-    id: '3',
-    name: 'Done',
+    name: 'DONE',
     items: []
   }
 ]
 
 function App() {
   document.body.style.backgroundColor = 'rgb(26, 32, 39)'
-
   const [columns, setColumns] = useState(initialColumns)
+  const [itemId, setItemId] = useState(0)
+  const columnsCopy = JSON.parse(JSON.stringify(columns))
+
+  const removeItem = (column, id) => {
+    const columnCopy = JSON.parse(JSON.stringify(column))
+    const filteredItems = columnCopy.items.filter(item => item.id !== id)
+    columnsCopy[column.id].items = filteredItems
+    setColumns(columnsCopy)
+  }
+
+  const addItem = (column, text) => {
+    const columnCopy = JSON.parse(JSON.stringify(column))
+    const newItem = { id: itemId, content: text }
+    columnsCopy[column.id].items = columnCopy.items = [
+      ...columnCopy.items,
+      newItem
+    ]
+    setColumns(columnsCopy)
+    console.log(columnsCopy)
+    setItemId(itemId + 1)
+  }
 
   const onDragEnd = results => {
     const { source, destination } = results
-    console.log(results)
+    // console.log(results)
 
     // Pega o index das colunas
     const sourceIndex = source.droppableId
@@ -49,12 +63,12 @@ function App() {
     let destinationColumnItems = columns[destinationIndex].items
 
     // Deepcopy do state
-    let columnsCopy = JSON.parse(JSON.stringify(columns))
 
     // Filtra o item e retira o que queremos mexer
     let filteredSrcColumnItems = sourceColumnItems.filter(
       item => item.id !== results.draggableId
     )
+    console.log(filteredSrcColumnItems)
 
     // Pega o item "arrastado"
     let draggedItem = (sourceColumnItems = sourceColumnItems[sourceItemIndex])
@@ -76,7 +90,16 @@ function App() {
     }
   }
 
-  return <Column onDragEnd={onDragEnd} columns={columns} />
+  return (
+    <>
+      <Column
+        onDragEnd={onDragEnd}
+        columns={columns}
+        removeItem={removeItem}
+        addItem={addItem}
+      />
+    </>
+  )
 }
 
 export default App
