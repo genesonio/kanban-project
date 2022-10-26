@@ -8,10 +8,10 @@ import { DeleteRounded } from '@mui/icons-material'
 
 export const Items = ({ column, removeItem }) =>
   column.items.map((item) => (
-    <Draggable draggableId={item.id.toString()} index={item.id} key={item.id}>  
+    <Draggable draggableId={item.id.toString()} index={item.id} key={item.id.toString()}>  
       {provided => (
         <Paper
-          key={item.id}
+          key={item.id.toString()}
           {...provided.dragHandleProps}
           {...provided.draggableProps}
           ref={provided.innerRef}

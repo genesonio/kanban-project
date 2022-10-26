@@ -1,5 +1,5 @@
-import { DragDropContext, Droppable } from 'react-beautiful-dnd'
-import { Items } from './Items'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd' 
+import { Items } from '../items'
 import { Paper, Typography, Icon, TextField } from '@mui/material'
 import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
@@ -8,10 +8,9 @@ import '@fontsource/roboto/700.css'
 import { useState } from 'react'
 
 export const Column = ({ onDragEnd, columns, removeItem, addItem }) => {
-  const [text, setText] = useState(null)
+  const [text, setText] = useState('')
 
-  return (
-    <div
+  return <div
       style={{
         display: 'flex',
         justifyContent: 'center'
@@ -35,6 +34,7 @@ export const Column = ({ onDragEnd, columns, removeItem, addItem }) => {
               {column.name}
             </Typography>
             <Droppable droppableId={column.id} key={column.id}>
+
               {provided => (
                 <Paper
                   elevation={12}
@@ -58,10 +58,19 @@ export const Column = ({ onDragEnd, columns, removeItem, addItem }) => {
                     alignItems: 'center'
                   }}>
                     <TextField
+                      onKeyDown={(ev) => {
+                        const { key } = ev
+                        if (key === 'Enter') {
+                          addItem(column, text)      
+                          ev.preventDefault()
+                        }
+
+                      }}
                       onChange={(e) => setText(e.target.value)}
                       fullWidth
                       variant='standard'
-                      style={{fontColor: 'whitesmoke'}}/>
+                      color='primary'
+                      sx={{input:{color: 'whitesmoke'}}} />
                     <Icon
                       style={{
                         marginLeft:'1rem'
@@ -69,14 +78,14 @@ export const Column = ({ onDragEnd, columns, removeItem, addItem }) => {
                       onClick={() => addItem(column, text)}
                       color='primary'>add_circle</Icon>
                   </div>
-                  <Items column={column} removeItem={removeItem} />
-                  {provided.placeholder}
+                    <Items column={column} removeItem={removeItem} />
+                    {provided.placeholder}
                 </Paper>
               )}
-            </Droppable>
+              </Droppable>
           </div>
         ))}
       </DragDropContext>
     </div>
-  )
+  
 }

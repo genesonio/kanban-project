@@ -40,13 +40,11 @@ function App() {
       newItem
     ]
     setColumns(columnsCopy)
-    console.log(columnsCopy)
     setItemId(itemId + 1)
   }
 
   const onDragEnd = results => {
     const { source, destination } = results
-    // console.log(results)
 
     // Pega o index das colunas
     const sourceIndex = source.droppableId
@@ -59,25 +57,24 @@ function App() {
     const sameColumn = sourceIndex === destinationIndex
 
     // Pega o estado atual do array
-    let sourceColumnItems = columns[sourceIndex].items
-    let destinationColumnItems = columns[destinationIndex].items
-
-    // Deepcopy do state
+    const sourceColumnItems = columnsCopy[sourceIndex].items
+    const destinationColumnItems = columnsCopy[destinationIndex].items
 
     // Filtra o item e retira o que queremos mexer
-    let filteredSrcColumnItems = sourceColumnItems.filter(
-      item => item.id !== results.draggableId
+    const filteredSrcColumnItems = sourceColumnItems.filter(
+      item => item.id.toString() !== results.draggableId
     )
-    console.log(filteredSrcColumnItems)
 
     // Pega o item "arrastado"
-    let draggedItem = (sourceColumnItems = sourceColumnItems[sourceItemIndex])
+    const draggedItem = sourceColumnItems[sourceItemIndex]
+    console.log(draggedItem)
 
     if (sameColumn) {
       // Coloca o item "arrastado" no local desejado em outra posição do array
       filteredSrcColumnItems.splice(destinationItemIndex, 0, draggedItem)
 
       columnsCopy[destinationIndex].items = filteredSrcColumnItems
+
       setColumns(columnsCopy)
     } else {
       // Adiciona o item "arrastado" para a nova coluna
