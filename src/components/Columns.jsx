@@ -1,5 +1,5 @@
 import { DragDropContext, Droppable } from 'react-beautiful-dnd' 
-import { Items } from '../items'
+import { Items } from './Items'
 import { Paper, Typography, Icon, TextField } from '@mui/material'
 import '@fontsource/roboto/300.css'
 import '@fontsource/roboto/400.css'
