@@ -21,7 +21,7 @@ export const Column = ({ onDragEnd, columns, removeItem, addItem }) => {
     href="https://fonts.googleapis.com/icon?family=Material+Icons"
   />
       <DragDropContext onDragEnd={onDragEnd}>
-        {columns.map((column) => (
+      {columns.map((column, index) => (
           <div
             key={column.id}
             style={{
@@ -34,7 +34,6 @@ export const Column = ({ onDragEnd, columns, removeItem, addItem }) => {
               {column.name}
             </Typography>
             <Droppable droppableId={column.id} key={column.id}>
-
               {provided => (
                 <Paper
                   elevation={12}
@@ -78,8 +77,8 @@ export const Column = ({ onDragEnd, columns, removeItem, addItem }) => {
                       onClick={() => addItem(column, text)}
                       color='primary'>add_circle</Icon>
                   </div>
-                    <Items column={column} removeItem={removeItem} />
-                    {provided.placeholder}
+                  <Items column={column} removeItem={removeItem} index={index} />
+                  {provided.placeholder}
                 </Paper>
               )}
               </Droppable>

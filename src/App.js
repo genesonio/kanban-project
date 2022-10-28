@@ -23,9 +23,9 @@ function App() {
   document.body.style.backgroundColor = 'rgb(26, 32, 39)'
   const [columns, setColumns] = useState(initialColumns)
   const [itemId, setItemId] = useState(0)
-  const columnsCopy = JSON.parse(JSON.stringify(columns))
 
   const removeItem = (column, id) => {
+    const columnsCopy = JSON.parse(JSON.stringify(columns))
     const columnCopy = JSON.parse(JSON.stringify(column))
     const filteredItems = columnCopy.items.filter(item => item.id !== id)
     columnsCopy[column.id].items = filteredItems
@@ -33,6 +33,7 @@ function App() {
   }
 
   const addItem = (column, text) => {
+    const columnsCopy = JSON.parse(JSON.stringify(columns))
     const columnCopy = JSON.parse(JSON.stringify(column))
     const newItem = { id: itemId, content: text }
     columnsCopy[column.id].items = columnCopy.items = [
@@ -55,6 +56,7 @@ function App() {
     const destinationItemIndex = destination.index
 
     const sameColumn = sourceIndex === destinationIndex
+    const columnsCopy = JSON.parse(JSON.stringify(columns))
 
     // Pega o estado atual do array
     const sourceColumnItems = columnsCopy[sourceIndex].items
@@ -67,7 +69,6 @@ function App() {
 
     // Pega o item "arrastado"
     const draggedItem = sourceColumnItems[sourceItemIndex]
-    console.log(draggedItem)
 
     if (sameColumn) {
       // Coloca o item "arrastado" no local desejado em outra posição do array
