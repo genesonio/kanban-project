@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Column } from './components/Columns'
+import { Columns } from './components/Columns'
 
 const initialColumns = [
   {
@@ -45,14 +45,13 @@ function App() {
   }
 
   const onDragEnd = results => {
-    const { source, destination } = results
-
+    const { source, destination, draggableId } = results
     // Pega o index das colunas
     const sourceIndex = source.droppableId
     const destinationIndex = destination.droppableId
 
     // Pega o index dos itens
-    const sourceItemIndex = source.index
+    // const sourceItemIndex = source.index
     const destinationItemIndex = destination.index
 
     const sameColumn = sourceIndex === destinationIndex
@@ -64,22 +63,24 @@ function App() {
 
     // Filtra o item e retira o que queremos mexer
     const filteredSrcColumnItems = sourceColumnItems.filter(
-      item => item.id.toString() !== results.draggableId
+      item => item.id.toString() !== draggableId
     )
 
     // Pega o item "arrastado"
-    const draggedItem = sourceColumnItems[sourceItemIndex]
+    const draggedItem = sourceColumnItems.filter(item => {
+      return item.id.toString() === draggableId
+    })
 
     if (sameColumn) {
       // Coloca o item "arrastado" no local desejado em outra posição do array
-      filteredSrcColumnItems.splice(destinationItemIndex, 0, draggedItem)
+      filteredSrcColumnItems.splice(destinationItemIndex, 0, ...draggedItem)
 
       columnsCopy[destinationIndex].items = filteredSrcColumnItems
 
       setColumns(columnsCopy)
     } else {
       // Adiciona o item "arrastado" para a nova coluna
-      destinationColumnItems.splice(destinationItemIndex, 0, draggedItem)
+      destinationColumnItems.splice(destinationItemIndex, 0, ...draggedItem)
 
       columnsCopy[sourceIndex].items = filteredSrcColumnItems
       columnsCopy[destinationIndex].items = destinationColumnItems
@@ -90,7 +91,7 @@ function App() {
 
   return (
     <>
-      <Column
+      <Columns
         onDragEnd={onDragEnd}
         columns={columns}
         removeItem={removeItem}

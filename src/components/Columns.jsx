@@ -7,7 +7,7 @@ import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 import { useState } from 'react'
 
-export const Column = ({ onDragEnd, columns, removeItem, addItem }) => {
+export const Columns = ({ onDragEnd, columns, removeItem, addItem }) => {
   const [text, setText] = useState('')
 
   return <div
@@ -23,7 +23,7 @@ export const Column = ({ onDragEnd, columns, removeItem, addItem }) => {
       <DragDropContext onDragEnd={onDragEnd}>
       {columns.map((column, index) => (
           <div
-            key={column.id}
+            key={parseInt(column.id)}
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -37,7 +37,6 @@ export const Column = ({ onDragEnd, columns, removeItem, addItem }) => {
               {provided => (
                 <Paper
                   elevation={12}
-                  ref={provided.innerRef}
                   style={{
                     backgroundColor: 'rgb(18, 18, 18)',
                     borderRadius: '1.5rem',
@@ -76,9 +75,11 @@ export const Column = ({ onDragEnd, columns, removeItem, addItem }) => {
                       }}
                       onClick={() => addItem(column, text)}
                       color='primary'>add_circle</Icon>
-                  </div>
+                </div>
+                <div ref={provided.innerRef} style={{height: '100%'}}>
                   <Items column={column} removeItem={removeItem} index={index} />
                   {provided.placeholder}
+                </div>
                 </Paper>
               )}
               </Droppable>
