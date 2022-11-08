@@ -43,17 +43,15 @@ export const Columns = ({ onDragEnd, columns, removeItem, addItem }) => {
                     width: '20rem',
                     height: '30rem',
                     margin: '.5rem',
-                    padding: '1rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '.5rem'
+                    padding: '1rem'
                   }}
                 >
                   <div
                     style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    marginBottom: '.5rem'
                   }}>
                     <TextField
                       onKeyDown={(ev) => {
@@ -76,7 +74,9 @@ export const Columns = ({ onDragEnd, columns, removeItem, addItem }) => {
                       onClick={() => addItem(column, text)}
                       color='primary'>add_circle</Icon>
                 </div>
-                <div ref={provided.innerRef} style={{height: '100%'}}>
+                <div ref={provided.innerRef} style={{height: '100%',display: 'flex',
+                    flexDirection: 'column',
+                    gap: '.5rem'}}>
                   <Items column={column} removeItem={removeItem} index={index} />
                   {provided.placeholder}
                 </div>
